@@ -1,4 +1,4 @@
-# 🚗 DTC Analyzer — WPM XCT
+# 🚗 DTC Analyzer 
 
 > Plateforme de visualisation, d'analyse et de gestion des **Codes Défauts (DTC)** issus de fichiers d'acquisition véhicule, développée avec Streamlit et MySQL.
 
@@ -12,7 +12,7 @@
 
 ## 📖 Description
 
-**DTC Analyzer** est un outil interne développé dans le cadre du projet **WPM XCT** pour centraliser et exploiter les données de diagnostic véhicule. Il permet d'ingérer des fichiers d'acquisition MDF, d'en extraire les codes défauts (DTC), de les stocker en base de données MySQL et de les visualiser à travers un dashboard interactif.
+**DTC Analyzer** est un outil interne développé  pour centraliser et exploiter les données de diagnostic véhicule. Il permet d'ingérer des fichiers d'acquisition MDF, d'en extraire les codes défauts (DTC), de les stocker en base de données MySQL et de les visualiser à travers un dashboard interactif.
 
 L'application couvre l'ensemble de la chaîne :
 
