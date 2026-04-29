@@ -150,3 +150,6 @@ Completed in 5.44s for 19 files.
 Completed in 0.00s for 0 files.
 ---
 
+2026-04-29 23:30:28 - Répertoire scanné : C:\Users\hp\Bureau\DTC-Analyzer\MDF_files
+2026-04-29 23:30:28 - Répertoire scanné : C:\Users\hp\Bureau\DTC-Analyzer\MDF_files\mdf
+2026-04-29 23:30:28 - Résumé : 0 fichiers insérés, 0.04s, cause : completed.

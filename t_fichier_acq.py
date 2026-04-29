@@ -40,7 +40,7 @@ def insert_t_traitement(connection, cursor, debut, fin, cause):
 
 # ── Signal handler ────────────────────────────────────────────
 def signal_handler(sig, frame):
-    global STOP_CAUSE, debut_traitement, db_connection_global
+    global STOP_CAUSE#, debut_traitement, db_connection_global
     STOP_CAUSE = "keyboard interrupted"
 
     overall_time = time.time() - start_time if start_time else 0
