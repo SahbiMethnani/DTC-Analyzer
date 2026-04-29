@@ -1,4 +1,4 @@
-# DTC Dashboard — WPM XCT
+# DTC Dashboard 
 
 Dashboard Streamlit pour la visualisation et la gestion des codes défauts (DTC).
 
