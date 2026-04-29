@@ -73,26 +73,6 @@ streamlit run app.py
 
 ---
 
-## ⚙️ Variables d'environnement (.env)
-
-| Variable          | Description                        | Défaut         |
-|-------------------|------------------------------------|----------------|
-| `DB_HOST`         | Hôte MySQL                         | `localhost`    |
-| `DB_NAME`         | Nom de la base de données          | `dtc_db`       |
-| `DB_USER`         | Utilisateur MySQL                  | `root`         |
-| `DB_PASSWORD`     | Mot de passe MySQL                 | _(vide)_       |
-| `DB_PORT`         | Port MySQL                         | `3306`         |
-| `DB_POOL_SIZE`    | Taille du pool de connexions       | `5`            |
-| `JOB1_PATH`       | Chemin vers le premier .exe        | `jobs/job1.exe`|
-| `JOB1_LABEL`      | Libellé affiché pour le job 1      | `Job 1 — Acquisition` |
-| `JOB2_PATH`       | Chemin vers le deuxième .exe       | `jobs/job2.exe`|
-| `JOB2_LABEL`      | Libellé affiché pour le job 2      | `Job 2 — Traitement`  |
-| `APP_TITLE`       | Titre de l'application             | `DTC Dashboard · WPM XCT` |
-| `APP_DEBUG`       | Mode debug                         | `false`        |
-| `CONTROL_PASSWORD`| Mot de passe de la page Contrôle  | `admin123`     |
-
----
-
 ## 🔒 Page Contrôle
 
 La page **⚙️ Contrôle** est accessible uniquement via un mot de passe défini
