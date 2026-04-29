@@ -79,7 +79,7 @@ def log_new_file(file_path, dtc_count=None, km=None, timestamp=None, invalid=Fal
 
 # ── Signal SIGINT ─────────────────────────────────────────────
 def signal_handler(sig, frame):
-    global TOTAL_FILES_PROCESSED
+    #global TOTAL_FILES_PROCESSED
     logging.info("Signal reçu. Fichiers traités : %s", TOTAL_FILES_PROCESSED)
     try:
         with open(config.SCAN_LOG_FILE, "a", encoding="utf-8") as f:
@@ -321,7 +321,7 @@ def parse_mdf_file(file_path, file_id, channels_dict, use_signal=False):
 
 # ── Traitement d'un fichier ───────────────────────────────────
 def process_file(file_path, file_id, connection, cursor, channels_dict, use_signal=False):
-    global TOTAL_FILES_PROCESSED
+    #global TOTAL_FILES_PROCESSED
     os.makedirs(config.LOCAL_DIR, exist_ok=True)
     local_path = os.path.join(config.LOCAL_DIR, os.path.basename(file_path))
 
