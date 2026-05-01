@@ -1,6 +1,3 @@
-"""
-pages/import_excel.py — Page Import DTC depuis Excel
-"""
 import streamlit as st
 import pandas as pd
 from database.connection import execute
@@ -43,7 +40,7 @@ def render():
     st.markdown(f"""
     <div class="metric-card">
         <div class="metric-label">Colonnes attendues dans le fichier Excel</div><br>
-        <code style="color:#e8ff3c">{" | ".join(REQUIRED_COLS)}</code>
+        <code style="color:#000000">{" | ".join(REQUIRED_COLS)}</code>
     </div>""", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
 

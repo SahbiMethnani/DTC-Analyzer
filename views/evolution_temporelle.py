@@ -1,6 +1,3 @@
-"""
-pages/evolution_temporelle.py — Page Évolution temporelle
-"""
 import streamlit as st
 import pandas as pd
 import plotly.express as px

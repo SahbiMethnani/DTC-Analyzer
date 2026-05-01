@@ -1,8 +1,3 @@
-"""
-pages/controle.py — Page Contrôle (protégée par mot de passe)
-  • Édition des variables .env
-  • Lancement des deux jobs .exe avec suivi en temps réel
-"""
 import subprocess
 import threading
 import time

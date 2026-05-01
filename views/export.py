@@ -1,6 +1,3 @@
-"""
-pages/export.py — Page Export des données
-"""
 import streamlit as st
 import pandas as pd
 from datetime import datetime
