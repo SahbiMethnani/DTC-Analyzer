@@ -24,7 +24,7 @@ def pie_by_calculateur(df, hole: float = 0.55, title: str = ""):
 
 
 def bar_top_dtc(df, n: int = 15):
-    top = df["DTC"].value_counts().head(n).reset_index()
+    top = df["dtc"].value_counts().head(n).reset_index()
     top.columns = ["DTC", "Occurrences"]
     fig = px.bar(
         top, x="Occurrences", y="DTC", orientation="h",
@@ -53,7 +53,7 @@ def bar_per_file(df, top_n: int = 20):
 
 def bar_dtc_type(df):
     tmp = df.copy()
-    tmp["type"] = tmp["DTC"].str[0]
+    tmp["type"] = tmp["dtc"].str[0]
     grp = tmp.groupby("type").size().reset_index(name="count")
     fig = px.bar(
         grp, x="type", y="count",
@@ -64,12 +64,12 @@ def bar_dtc_type(df):
 
 
 def scatter_km(df):
-    km_grp = df.groupby("Kilometrage").size().reset_index(name="count")
+    km_grp = df.groupby("kilometrage").size().reset_index(name="count")
     fig = px.scatter(
-        km_grp, x="Kilometrage", y="count",
+        km_grp, x="kilometrage", y="count",
         size="count", color="count",
         color_continuous_scale=["#252830", "#ff3c6e"],
-        labels={"count": "DTC", "Kilometrage": "Kilométrage (km)"},
+        labels={"count": "DTC", "kilometrage": "Kilométrage (km)"},
     )
     fig.update_layout(coloraxis_showscale=False)
     return apply_theme(fig)

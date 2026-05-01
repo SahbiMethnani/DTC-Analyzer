@@ -25,7 +25,7 @@ def load_dtc_all() -> pd.DataFrame:
     """
     df = query("""
         SELECT d.id, d.date, d.DTC, d.calculateur, d.Kilometrage,
-               d.délai_apparition, d.groupe_apparition,
+               d.delai_apparition, d.groupe_apparition,
                d.status_suivi, d.commentaire,
                d.id_t_acq_files,
                c.L_CHANNELS AS channel_name,

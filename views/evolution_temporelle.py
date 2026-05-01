@@ -47,7 +47,7 @@ def render(filt_dtc: pd.DataFrame):
     # ── Par type DTC ──────────────────────────────────────────
     section_title("Évolution par type de DTC (P / C / B / U)")
     tmp = filt_dtc.copy()
-    tmp["type"] = tmp["DTC"].str[0]
+    tmp["type"] = tmp["dtc"].str[0]
     type_ts = (
         tmp.set_index("date")
         .groupby("type")
@@ -81,7 +81,7 @@ def render(filt_dtc: pd.DataFrame):
     # ── Délai d'apparition ────────────────────────────────────
     section_title("Distribution du délai d'apparition")
     fig4 = px.histogram(
-        filt_dtc, x="délai_apparition", nbins=50,
+        filt_dtc, x="delai_apparition", nbins=50,
         color="calculateur", color_discrete_map=CALC_COLORS,
         labels={"délai_apparition": "Délai (s)", "count": "Fréquence"},
         barmode="overlay", opacity=0.75,

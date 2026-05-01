@@ -4,6 +4,8 @@ import os
 load_dotenv()  # charge le fichier .env
 
 # ── Base de données ──────────────────────────────────────────
+
+"""
 DB_HOST     = os.getenv("DB_HOST",     "localhost")
 DB_NAME     = os.getenv("DB_NAME",     "dtc-analyser")
 DB_USER     = os.getenv("DB_USER",     "root")
@@ -11,9 +13,19 @@ DB_PASSWORD = os.getenv("DB_PASSWORD", "")
 DB_POOL_NAME = os.getenv("DB_POOL_NAME", "mypool")
 DB_POOL_SIZE = int(os.getenv("DB_POOL_SIZE", 5))
 DB_PORT      = int(os.getenv("DB_PORT", "3306"))
+"""
+DB_HOST = os.getenv("DB_HOST", "db.fagkrmdswksleixwcvee.supabase.co")
+DB_NAME = os.getenv("DB_NAME", "postgres")
+DB_USER = os.getenv("DB_USER", "postgres")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "")
+DB_PORT = int(os.getenv("DB_PORT", 5432))
+DB_SSLMODE = os.getenv("DB_SSLMODE", "require")
 
+DATABASE_URL = os.getenv("DATABASE_URL", None)
 
-# ── Traitement des fichiers ──────────────────────────────────
+DB_POOL_MIN = int(os.getenv("DB_POOL_MIN", 1))
+DB_POOL_MAX = int(os.getenv("DB_POOL_MAX", 5))
+
 BATCH_SIZE               = int(os.getenv("BATCH_SIZE",               1))
 SCAN_LOG_FILE            = os.getenv("SCAN_LOG_FILE",            "log.txt")
 MEMORY_THRESHOLD_PERCENT = int(os.getenv("MEMORY_THRESHOLD_PERCENT", 80))
@@ -49,3 +61,4 @@ JOB2_LABEL   = os.getenv("JOB2_LABEL", "Job 2 — Traitement")
 
 # ── Sécurité ─────────────────────────────────────────────────
 CONTROL_PASSWORD = os.getenv("CONTROL_PASSWORD", "admin123")
+DB_POOL_SIZE = int(os.getenv("DB_POOL_SIZE", 5))

@@ -76,10 +76,10 @@ def render(filt_dtc: pd.DataFrame):
     recap = (
         tmp.groupby("annee_semaine")
         .agg(
-            nb_dtc      = ("DTC",          "count"),
+            nb_dtc      = ("dtc",          "count"),
             nb_fichiers = ("path",         "nunique"),
             calculateurs= ("calculateur",  lambda x: ", ".join(x.unique())),
-            km_max      = ("Kilometrage",  "max"),
+            km_max      = ("kilometrage",  "max"),
         )
         .reset_index()
         .sort_values("annee_semaine", ascending=False)
