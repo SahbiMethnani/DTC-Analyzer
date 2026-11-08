@@ -1,6 +1,3 @@
-"""
-pages/vue_globale.py — Page Vue globale
-"""
 import streamlit as st
 import pandas as pd
 from components.metrics import kpi_row

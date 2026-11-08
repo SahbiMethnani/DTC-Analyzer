@@ -1,6 +1,3 @@
-"""
-pages/fichiers_dtc.py — Page Fichiers & DTC
-"""
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -14,7 +11,6 @@ def render(filt_dtc: pd.DataFrame, filt_files: pd.DataFrame):
 
     tab1, tab2 = st.tabs(["📁 Liste des fichiers", "🔍 DTC par fichier"])
 
-    # ── Tab 1 : liste fichiers ────────────────────────────────
     with tab1:
         section_title("Fichiers d'acquisition")
         if not filt_files.empty:
@@ -30,7 +26,6 @@ def render(filt_dtc: pd.DataFrame, filt_files: pd.DataFrame):
         else:
             st.info("Aucun fichier trouvé.")
 
-    # ── Tab 2 : DTC par fichier ───────────────────────────────
     with tab2:
         section_title("DTC pour un fichier sélectionné")
         if not filt_files.empty:
@@ -42,7 +37,6 @@ def render(filt_dtc: pd.DataFrame, filt_files: pd.DataFrame):
             file_dtc = filt_dtc[filt_dtc["path"] == sel_file] if sel_file else pd.DataFrame()
 
             if not file_dtc.empty:
-                # Mini KPIs
                 c1, c2, c3 = st.columns(3)
                 with c1:
                     metric_card("DTC total", len(file_dtc))

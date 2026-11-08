@@ -1,6 +1,4 @@
-"""
-pages/export.py — Page Export des données
-"""
+
 import streamlit as st
 import pandas as pd
 from datetime import datetime
@@ -36,7 +34,6 @@ def render(filt_dtc: pd.DataFrame, filt_files: pd.DataFrame):
     col1, col2 = st.columns(2)
     ts = datetime.now().strftime("%Y%m%d_%H%M")
 
-    # ── Excel ─────────────────────────────────────────────────
     with col1:
         section_title("Export Excel")
         if not export_df.empty:
@@ -49,7 +46,6 @@ def render(filt_dtc: pd.DataFrame, filt_files: pd.DataFrame):
         else:
             st.info("Aucune donnée à exporter.")
 
-    # ── PDF ───────────────────────────────────────────────────
     with col2:
         section_title("Export PDF")
         if not export_df.empty:
@@ -66,7 +62,6 @@ def render(filt_dtc: pd.DataFrame, filt_files: pd.DataFrame):
         else:
             st.info("Aucune donnée à exporter.")
 
-    # ── Export fichiers ───────────────────────────────────────
     st.markdown("---")
     section_title("Export liste des fichiers")
     if not filt_files.empty:

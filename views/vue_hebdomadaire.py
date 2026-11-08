@@ -1,6 +1,3 @@
-"""
-pages/vue_hebdomadaire.py — Page Vue hebdomadaire
-"""
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -18,14 +15,12 @@ def render(filt_dtc: pd.DataFrame):
         st.info("Pas de données disponibles.")
         return
 
-    # Ajout des colonnes temporelles
     tmp = filt_dtc.copy()
     tmp["semaine"]       = tmp["date"].dt.isocalendar().week.astype(int)
     tmp["annee"]         = tmp["date"].dt.isocalendar().year.astype(int)
     tmp["annee_semaine"] = tmp["annee"].astype(str) + "-S" + tmp["semaine"].astype(str).str.zfill(2)
     tmp["jour_semaine"]  = tmp["date"].dt.day_name()
 
-    # ── Barres par semaine ────────────────────────────────────
     section_title("DTC par semaine")
     weekly = tmp.groupby(["annee_semaine", "calculateur"]).size().reset_index(name="count")
     fig = px.bar(
@@ -39,21 +34,19 @@ def render(filt_dtc: pd.DataFrame):
     fig.update_layout(xaxis_tickangle=-45)
     st.plotly_chart(fig, use_container_width=True)
 
-    # ── Heatmap semaine × jour ────────────────────────────────
     section_title("Heatmap — Semaine × Jour")
     heat = tmp.groupby(["annee_semaine", "jour_semaine"]).size().reset_index(name="count")
     heat_pivot = heat.pivot(index="annee_semaine", columns="jour_semaine", values="count").fillna(0)
     heat_pivot = heat_pivot.reindex(columns=[d for d in DAY_ORDER if d in heat_pivot.columns])
     fig2 = px.imshow(
         heat_pivot,
-        color_continuous_scale=["#0d0f14", "#e8ff3c"],
+        color_continuous_scale=["#0d0f14", "#f9faf5"],
         aspect="auto",
         labels=dict(x="Jour", y="Semaine", color="DTC"),
     )
     apply_theme(fig2)
     st.plotly_chart(fig2, use_container_width=True)
 
-    # ── Top semaines ──────────────────────────────────────────
     section_title("Semaines avec le plus de DTC")
     top_w = (
         tmp.groupby("annee_semaine").size()
@@ -71,7 +64,6 @@ def render(filt_dtc: pd.DataFrame):
     apply_theme(fig3)
     st.plotly_chart(fig3, use_container_width=True)
 
-    # ── Tableau récap ─────────────────────────────────────────
     section_title("Récapitulatif hebdomadaire")
     recap = (
         tmp.groupby("annee_semaine")

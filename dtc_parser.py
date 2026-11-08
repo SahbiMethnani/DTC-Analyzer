@@ -13,10 +13,8 @@ import sys
 import gc
 from collections import defaultdict
 
-# ── Import de la configuration ────────────────────────────────
 import config
 
-# ── Logging ──────────────────────────────────────────────────
 logging.getLogger("asammdf").setLevel(logging.CRITICAL)
 
 class NoErrorFilter(logging.Filter):
@@ -29,10 +27,8 @@ console_handler.addFilter(NoErrorFilter())
 console_handler.setFormatter(logging.Formatter('%(asctime)s [%(levelname)s] %(message)s'))
 logging.basicConfig(level=logging.INFO, handlers=[console_handler])
 
-# ── État global ───────────────────────────────────────────────
 TOTAL_FILES_PROCESSED = 0
 
-# ── Pool de connexions ────────────────────────────────────────
 def init_db_pool():
     try:
         pool = MySQLConnectionPool(
@@ -55,14 +51,12 @@ POOL = init_db_pool()
 def get_db_connection():
     return POOL.get_connection()
 
-# ── Mémoire ───────────────────────────────────────────────────
 def check_memory_usage():
     mem = psutil.virtual_memory()
     if mem.percent > config.MEMORY_THRESHOLD_PERCENT:
         logging.warning("High memory usage: %s%%. Forcing garbage collection.", mem.percent)
         gc.collect()
 
-# ── Logging fichier ───────────────────────────────────────────
 def log_new_file(file_path, dtc_count=None, km=None, timestamp=None, invalid=False):
     try:
         now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -77,9 +71,7 @@ def log_new_file(file_path, dtc_count=None, km=None, timestamp=None, invalid=Fal
     except Exception as e:
         logging.error("Error writing to scan log for %s: %s", file_path, e)
 
-# ── Signal SIGINT ─────────────────────────────────────────────
 def signal_handler(sig, frame):
-    #global TOTAL_FILES_PROCESSED
     logging.info("Signal reçu. Fichiers traités : %s", TOTAL_FILES_PROCESSED)
     try:
         with open(config.SCAN_LOG_FILE, "a", encoding="utf-8") as f:
@@ -90,7 +82,6 @@ def signal_handler(sig, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
-# ── Conversion DTC ────────────────────────────────────────────
 def convert_hex_to_bit_and_back(hex_value: str, mask: int) -> str:
     try:
         return format(int(hex_value, 16) & mask, 'X')
@@ -129,7 +120,6 @@ def deduce_calculator(dtc_code: str) -> str:
         return "TCU" if dtc_code[1:3] == "07" else "ECU"
     return mapping.get(prefix, "VCU")
 
-# ── Requêtes DB ───────────────────────────────────────────────
 def get_mdf_file_paths_batch(cursor, offset):
     try:
         cursor.execute(
@@ -199,7 +189,6 @@ def insert_records(records, cursor, connection):
         logging.error("Error inserting records: %s", err)
         return 0
 
-# ── Parsing MDF ───────────────────────────────────────────────
 def calculate_elapsed_time(start, current) -> float:
     return (current - start).total_seconds()
 
@@ -230,7 +219,6 @@ def parse_mdf_file(file_path, file_id, channels_dict, use_signal=False):
         mdf = MDF(file_path, memory_map=True)
         available = list(mdf.channels_db.keys())
 
-        # Kilométrage
         df_km = mdf.to_dataframe(channels=[config.KM_CHANNEL])
         df_km = df_km.loc[:, ~df_km.columns.duplicated()]
         df_km.index = pd.to_datetime(df_km.index, unit='s', errors='coerce')
@@ -319,9 +307,7 @@ def parse_mdf_file(file_path, file_id, channels_dict, use_signal=False):
                 pass
         gc.collect()
 
-# ── Traitement d'un fichier ───────────────────────────────────
 def process_file(file_path, file_id, connection, cursor, channels_dict, use_signal=False):
-    #global TOTAL_FILES_PROCESSED
     os.makedirs(config.LOCAL_DIR, exist_ok=True)
     local_path = os.path.join(config.LOCAL_DIR, os.path.basename(file_path))
 
@@ -355,7 +341,6 @@ def process_file(file_path, file_id, connection, cursor, channels_dict, use_sign
         gc.collect()
         check_memory_usage()
 
-# ── Boucle principale ─────────────────────────────────────────
 def process_all_files():
     connection = get_db_connection()
     cursor = connection.cursor()
