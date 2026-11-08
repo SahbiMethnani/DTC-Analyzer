@@ -1,6 +1,3 @@
-"""
-pages/evolution_temporelle.py — Page Évolution temporelle
-"""
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -24,16 +21,13 @@ def render(filt_dtc: pd.DataFrame):
         st.info("Pas de données temporelles disponibles.")
         return
 
-    # ── Granularité ───────────────────────────────────────────
     granularity = st.radio("Granularité", list(FREQ_MAP.keys()), horizontal=True)
     freq = FREQ_MAP[granularity]
 
-    # ── Courbe globale ────────────────────────────────────────
     section_title("Courbe d'évolution globale")
     ts = filt_dtc.set_index("date").resample(freq).size().reset_index(name="count")
     st.plotly_chart(area_global_ts(ts), use_container_width=True)
 
-    # ── Par calculateur ───────────────────────────────────────
     section_title("Évolution par calculateur")
     calc_ts = (
         filt_dtc.set_index("date")
@@ -44,7 +38,6 @@ def render(filt_dtc: pd.DataFrame):
     )
     st.plotly_chart(line_by_calc(calc_ts), use_container_width=True)
 
-    # ── Par type DTC ──────────────────────────────────────────
     section_title("Évolution par type de DTC (P / C / B / U)")
     tmp = filt_dtc.copy()
     tmp["type"] = tmp["DTC"].str[0]
@@ -78,7 +71,6 @@ def render(filt_dtc: pd.DataFrame):
     fig3.update_yaxes(gridcolor="#252830", linecolor="#252830")
     st.plotly_chart(fig3, use_container_width=True)
 
-    # ── Délai d'apparition ────────────────────────────────────
     section_title("Distribution du délai d'apparition")
     fig4 = px.histogram(
         filt_dtc, x="délai_apparition", nbins=50,

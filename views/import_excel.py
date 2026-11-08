@@ -1,6 +1,3 @@
-"""
-pages/import_excel.py — Page Import DTC depuis Excel
-"""
 import streamlit as st
 import pandas as pd
 from database.connection import execute
@@ -68,7 +65,6 @@ def render():
         except Exception as e:
             st.error(f"Erreur lecture fichier : {e}")
 
-    # Template téléchargeable
     st.markdown("---")
     section_title("Télécharger un template")
     template = pd.DataFrame(columns=REQUIRED_COLS)

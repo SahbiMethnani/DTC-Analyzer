@@ -11,7 +11,6 @@ from utils.style import section_title
 def render(filt_dtc: pd.DataFrame, filt_files: pd.DataFrame):
     st.markdown("## Vue globale")
 
-    # ── KPIs ─────────────────────────────────────────────────
     kpi_row([
         ("Fichiers total",     len(filt_files)),
         ("Fichiers traités",   int(filt_files["dateprocessed"].notna().sum()) if not filt_files.empty else 0),
@@ -20,7 +19,6 @@ def render(filt_dtc: pd.DataFrame, filt_files: pd.DataFrame):
         ("Calculateurs",       filt_dtc["calculateur"].nunique() if not filt_dtc.empty else 0),
     ])
 
-    # ── Rangée 1 : répartition globale ───────────────────────
     col1, col2 = st.columns(2)
 
     with col1:
@@ -37,12 +35,10 @@ def render(filt_dtc: pd.DataFrame, filt_files: pd.DataFrame):
         else:
             st.info("Aucune donnée")
 
-    # ── Rangée 2 : DTC par fichier ────────────────────────────
     section_title("DTC par fichier (top 20)")
     if not filt_dtc.empty:
         st.plotly_chart(bar_per_file(filt_dtc), use_container_width=True)
 
-    # ── Rangée 3 : type & kilométrage ────────────────────────
     col3, col4 = st.columns(2)
 
     with col3:

@@ -1,8 +1,3 @@
-"""
-pages/controle.py — Page Contrôle (protégée par mot de passe)
-  • Édition des variables .env
-  • Lancement des deux jobs .exe avec suivi en temps réel
-"""
 import subprocess
 import threading
 import time
@@ -14,35 +9,25 @@ import streamlit as st
 import config
 from utils.style import section_title
 
-# ── Chemin absolu vers le fichier .env ────────────────────────
 ENV_PATH = Path(__file__).parent.parent / ".env"
 
-# Clés du .env éditables depuis l'interface (label, clé env, type)
 ENV_FIELDS = [
-    # ── Base de données ──────────────────────────────────────
     ("DB_HOST",          "Hôte MySQL",                  "text"),
     ("DB_NAME",          "Nom de la base",              "text"),
     ("DB_USER",          "Utilisateur MySQL",           "text"),
     ("DB_PASSWORD",      "Mot de passe MySQL",          "password"),
     ("DB_PORT",          "Port MySQL",                  "text"),
     ("DB_POOL_SIZE",     "Taille du pool de connexions","text"),
-    # ── Jobs ─────────────────────────────────────────────────
     ("JOB1_PATH",        "Chemin job 1 (.exe)",         "text"),
     ("JOB1_LABEL",       "Libellé job 1",               "text"),
     ("JOB2_PATH",        "Chemin job 2 (.exe)",         "text"),
     ("JOB2_LABEL",       "Libellé job 2",               "text"),
-    # ── Application ──────────────────────────────────────────
     ("APP_TITLE",        "Titre de l'application",      "text"),
     ("APP_DEBUG",        "Mode debug (true/false)",     "text"),
 ]
 
 
-# ═══════════════════════════════════════════════════════════════
-# HELPERS — .env
-# ═══════════════════════════════════════════════════════════════
-
 def _read_env() -> dict[str, str]:
-    """Lit le fichier .env et retourne un dict clé→valeur (sans commentaires)."""
     env = {}
     if not ENV_PATH.exists():
         return env
@@ -55,10 +40,7 @@ def _read_env() -> dict[str, str]:
 
 
 def _write_env(new_values: dict[str, str]):
-    """
-    Met à jour le fichier .env en conservant les commentaires et
-    en ajoutant les clés manquantes à la fin.
-    """
+    
     if not ENV_PATH.exists():
         ENV_PATH.write_text("", encoding="utf-8")
 
@@ -78,7 +60,6 @@ def _write_env(new_values: dict[str, str]):
         else:
             result.append(line)
 
-    # Clés absentes du fichier → on les ajoute à la fin
     for key, val in new_values.items():
         if key not in updated:
             result.append(f"{key}={val}")
@@ -86,15 +67,8 @@ def _write_env(new_values: dict[str, str]):
     ENV_PATH.write_text("\n".join(result) + "\n", encoding="utf-8")
 
 
-# ═══════════════════════════════════════════════════════════════
-# HELPERS — Jobs
-# ═══════════════════════════════════════════════════════════════
-
 def _run_job(job_key: int, exe_path: str):
-    """
-    Lance un exécutable dans un thread séparé.
-    Stocke l'état dans st.session_state sous job{N}_*.
-    """
+    
     sk_status = f"job{job_key}_status"
     sk_stdout = f"job{job_key}_stdout"
     sk_stderr = f"job{job_key}_stderr"
@@ -138,7 +112,6 @@ def _init_job_state(key: int):
 
 
 def _job_card(job_key: int, label: str, exe_path: str):
-    """Affiche la carte d'un job avec bouton de lancement et résultats."""
     _init_job_state(job_key)
 
     status  = st.session_state[f"job{job_key}_status"]
@@ -146,7 +119,6 @@ def _job_card(job_key: int, label: str, exe_path: str):
     stderr  = st.session_state[f"job{job_key}_stderr"]
     started = st.session_state[f"job{job_key}_start"]
 
-    # Couleur de bordure selon état
     border_class = {
         "idle":    "",
         "running": "job-card-running",
@@ -154,7 +126,6 @@ def _job_card(job_key: int, label: str, exe_path: str):
         "error":   "job-card-error",
     }.get(status, "")
 
-    # ── En-tête de la carte ───────────────────────────────────
     st.markdown(
         f'<div class="job-card {border_class}">',
         unsafe_allow_html=True,
@@ -195,7 +166,6 @@ def _job_card(job_key: int, label: str, exe_path: str):
             _run_job(job_key, exe_path)
             st.rerun()
 
-    # ── Sortie console ────────────────────────────────────────
     if stdout or stderr:
         st.markdown("<br>", unsafe_allow_html=True)
         if stdout:
@@ -209,7 +179,6 @@ def _job_card(job_key: int, label: str, exe_path: str):
                 unsafe_allow_html=True,
             )
 
-    # Bouton clear
     if status in ("success", "error"):
         if st.button("🗑 Réinitialiser", key=f"clear_job{job_key}"):
             for suffix in ("status","stdout","stderr","start"):
@@ -220,7 +189,6 @@ def _job_card(job_key: int, label: str, exe_path: str):
 
     st.markdown("</div>", unsafe_allow_html=True)
 
-    # Auto-refresh si job en cours
     if status == "running":
         time.sleep(1)
         st.rerun()
@@ -235,22 +203,15 @@ def _escape_html(text: str) -> str:
     )
 
 
-# ═══════════════════════════════════════════════════════════════
-# AUTHENTIFICATION
-# ═══════════════════════════════════════════════════════════════
 
 def _auth_wall() -> bool:
-    """
-    Affiche le formulaire de mot de passe.
-    Retourne True si l'utilisateur est authentifié.
-    """
+    
     if st.session_state.get("ctrl_authenticated"):
         return True
 
     st.markdown("## ⚙️ Contrôle")
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # Carte de connexion centrée
     _, center, _ = st.columns([1, 2, 1])
     with center:
         st.markdown("""
@@ -280,17 +241,12 @@ def _auth_wall() -> bool:
     return False
 
 
-# ═══════════════════════════════════════════════════════════════
-# RENDER PRINCIPAL
-# ═══════════════════════════════════════════════════════════════
-
 def render():
     if not _auth_wall():
         return
 
     st.markdown("## ⚙️ Contrôle")
 
-    # Bouton de déconnexion discret
     if st.button("🔒 Se déconnecter", key="ctrl_logout"):
         st.session_state["ctrl_authenticated"] = False
         st.rerun()
@@ -299,9 +255,7 @@ def render():
 
     tab_jobs, tab_env = st.tabs(["▶ Exécution des Jobs", "🛠 Variables d'environnement"])
 
-    # ══════════════════════════════════════════════════════════
-    # TAB 1 : JOBS
-    # ══════════════════════════════════════════════════════════
+
     with tab_jobs:
         section_title("Lancement des jobs")
 
@@ -323,9 +277,7 @@ def render():
             exe_path = config.JOB2_PATH,
         )
 
-    # ══════════════════════════════════════════════════════════
-    # TAB 2 : ÉDITEUR .env
-    # ══════════════════════════════════════════════════════════
+ 
     with tab_env:
         section_title("Édition du fichier .env")
 
@@ -341,10 +293,8 @@ def render():
             unsafe_allow_html=True,
         )
 
-        # ── Formulaire d'édition ──────────────────────────────
         new_values: dict[str, str] = {}
 
-        # Groupe DB
         section_title("Base de données")
         db_fields = [(k,l,t) for k,l,t in ENV_FIELDS if k.startswith("DB_")]
         col1, col2 = st.columns(2)
@@ -364,7 +314,6 @@ def render():
 
         st.markdown("<br>", unsafe_allow_html=True)
 
-        # Groupe Jobs
         section_title("Chemins des Jobs")
         job_fields = [(k,l,t) for k,l,t in ENV_FIELDS if k.startswith("JOB")]
         col3, col4 = st.columns(2)
@@ -377,7 +326,6 @@ def render():
 
         st.markdown("<br>", unsafe_allow_html=True)
 
-        # Groupe App
         section_title("Application")
         app_fields = [(k,l,t) for k,l,t in ENV_FIELDS if k.startswith("APP_")]
         col5, col6 = st.columns(2)
@@ -390,7 +338,6 @@ def render():
 
         st.markdown("<br>", unsafe_allow_html=True)
 
-        # ── Boutons d'action ──────────────────────────────────
         col_save, col_preview, col_reset = st.columns([1, 1, 2])
 
         with col_save:
@@ -411,12 +358,10 @@ def render():
                     "show_env_preview", False
                 )
 
-        # ── Aperçu brut du fichier .env ───────────────────────
         if st.session_state.get("show_env_preview") and ENV_PATH.exists():
             st.markdown("<br>", unsafe_allow_html=True)
             section_title("Contenu actuel du fichier .env")
             raw = ENV_PATH.read_text(encoding="utf-8")
-            # Masque les mots de passe dans l'aperçu
             masked_lines = []
             for line in raw.splitlines():
                 if "PASSWORD" in line.upper() and "=" in line:
