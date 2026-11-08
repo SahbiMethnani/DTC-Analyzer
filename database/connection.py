@@ -1,6 +1,3 @@
-"""
-database/connection.py — Pool de connexion MySQL et helpers SQL
-"""
 import streamlit as st
 import pandas as pd
 import config
@@ -8,7 +5,6 @@ import config
 
 @st.cache_resource
 def get_pool():
-    """Crée et met en cache le pool de connexions MySQL."""
     try:
         from mysql.connector.pooling import MySQLConnectionPool
         return MySQLConnectionPool(
@@ -27,10 +23,7 @@ def get_pool():
 
 
 def query(sql: str, params=None) -> pd.DataFrame:
-    """
-    Exécute un SELECT et retourne un DataFrame.
-    Retourne un DataFrame vide en cas d'erreur.
-    """
+    
     pool = get_pool()
     if pool is None:
         return pd.DataFrame()
@@ -45,10 +38,7 @@ def query(sql: str, params=None) -> pd.DataFrame:
 
 
 def execute(sql: str, params=None) -> bool:
-    """
-    Exécute un INSERT / UPDATE / DELETE.
-    Retourne True si succès, False sinon.
-    """
+    
     pool = get_pool()
     if pool is None:
         return False

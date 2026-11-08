@@ -1,5 +1,3 @@
-# tests/test_utils.py
-"""Tests unitaires — utilitaires DTC Dashboard"""
 import pandas as pd
 from utils.filters import apply_filters
 

@@ -1,14 +1,11 @@
-"""
-utils/style.py — CSS global, thème Plotly et helpers de mise en page
-"""
+
 import streamlit as st
 
-# ── Palette de couleurs ───────────────────────────────────────
 COLORS = {
-    "bg":       "#0d0f14",
+    "bg":       "#9E8C3A",
     "surface":  "#161920",
     "border":   "#252830",
-    "accent":   "#e8ff3c",
+    "accent":   "#69ff3c",
     "accent2":  "#3ce8ff",
     "accent3":  "#ff3c6e",
     "text":     "#e2e5ee",
@@ -16,7 +13,7 @@ COLORS = {
 }
 
 CALC_COLORS = {
-    "ECU": "#e8ff3c",
+    "ECU": "#69ff3c",
     "TCU": "#3ce8ff",
     "BCM": "#60a5fa",
     "CCM": "#f87171",
@@ -38,33 +35,31 @@ PLOTLY_THEME = dict(
     font=dict(family="DM Sans", color="#e2e5ee"),
     xaxis=dict(gridcolor="#252830", linecolor="#252830"),
     yaxis=dict(gridcolor="#252830", linecolor="#252830"),
-    colorway=["#e8ff3c", "#3ce8ff", "#ff3c6e", "#a78bfa", "#fb923c", "#34d399"],
+    colorway=["#69ff3c", "#3ce8ff", "#ff3c6e", "#a78bfa", "#fb923c", "#34d399"],
     margin=dict(l=20, r=20, t=40, b=20),
 )
 
 
 def apply_page_config():
-    """Configure la page Streamlit."""
     import config
     st.set_page_config(
         page_title=config.APP_TITLE,
-        page_icon="🚗",
+        page_icon=None,
         layout="wide",
         initial_sidebar_state="expanded",
     )
 
 
 def inject_css():
-    """Injecte le CSS personnalisé."""
     st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
 
 :root {
-    --bg:      #0d0f14;
+    --bg:      #3D3C85;
     --surface: #161920;
     --border:  #252830;
-    --accent:  #e8ff3c;
+    --accent:  #69ff3c;
     --accent2: #3ce8ff;
     --accent3: #ff3c6e;
     --text:    #e2e5ee;
@@ -84,7 +79,6 @@ html, body, [data-testid="stAppViewContainer"] {
 }
 h1, h2, h3, h4 { font-family: 'Space Mono', monospace; }
 
-/* ── Cartes métriques ─────────────────────────────────────── */
 .metric-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -115,7 +109,6 @@ h1, h2, h3, h4 { font-family: 'Space Mono', monospace; }
     margin-top: 6px;
 }
 
-/* ── Titres de section ────────────────────────────────────── */
 .section-title {
     font-family: 'Space Mono', monospace;
     font-size: 0.7rem;
@@ -127,14 +120,12 @@ h1, h2, h3, h4 { font-family: 'Space Mono', monospace; }
     margin-bottom: 16px;
 }
 
-/* ── Badges ───────────────────────────────────────────────── */
 .badge { display:inline-block; padding:2px 10px; border-radius:20px; font-size:0.72rem; font-family:'Space Mono',monospace; }
 .badge-p { background:#1a2e1a; color:#4ade80; border:1px solid #4ade8055; }
 .badge-c { background:#2e1a1a; color:#f87171; border:1px solid #f8717155; }
 .badge-b { background:#1a1f2e; color:#60a5fa; border:1px solid #60a5fa55; }
 .badge-u { background:#2e261a; color:#fbbf24; border:1px solid #fbbf2455; }
 
-/* ── Boutons ──────────────────────────────────────────────── */
 .stButton > button {
     background: var(--accent) !important;
     color: #0d0f14 !important;
@@ -148,13 +139,11 @@ h1, h2, h3, h4 { font-family: 'Space Mono', monospace; }
 }
 .stButton > button:hover { opacity: 0.85; }
 
-/* ── Bouton danger ────────────────────────────────────────── */
 .btn-danger > button {
     background: var(--accent3) !important;
     color: #fff !important;
 }
 
-/* ── Job card ─────────────────────────────────────────────── */
 .job-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -166,8 +155,6 @@ h1, h2, h3, h4 { font-family: 'Space Mono', monospace; }
 .job-card-success { border-color: #4ade80; }
 .job-card-error   { border-color: var(--accent3); }
 
-/* ── Inputs ───────────────────────────────────────────────── */
-/* ── Inputs — Select / Multiselect ───────────────────────── */
 .stSelectbox > div > div,
 .stMultiSelect > div > div {
     background: var(--surface) !important;
@@ -175,7 +162,6 @@ h1, h2, h3, h4 { font-family: 'Space Mono', monospace; }
     color: var(--text) !important;
 }
 
-/* ── Date input ───────────────────────────────────────────── */
 [data-testid="stDateInput"] > div,
 [data-testid="stDateInputField"] {
     background: var(--surface) !important;
@@ -211,7 +197,6 @@ h1, h2, h3, h4 { font-family: 'Space Mono', monospace; }
     border: 1px solid var(--border) !important;
     border-radius: 12px !important;
 }
-/* Tous les textes du calendrier */
 [data-baseweb="calendar"] *,
 [data-baseweb="calendar"] div,
 [data-baseweb="calendar"] span,
@@ -219,34 +204,29 @@ h1, h2, h3, h4 { font-family: 'Space Mono', monospace; }
     color: var(--text) !important;
     background-color: var(--surface) !important;
 }
-/* Mois + année (April 2026) */
 [data-baseweb="calendar"] [data-baseweb="select"] *,
 [data-baseweb="calendar"] h4,
 [data-baseweb="calendar"] h5 {
     color: var(--accent) !important;
     background: var(--surface) !important;
 }
-/* Jours de la semaine (Mo Tu We...) */
 [data-baseweb="calendar"] [aria-label],
 [data-baseweb="weekday"] {
     color: var(--muted) !important;
     background: var(--surface) !important;
 }
-/* Jour sélectionné */
 [data-baseweb="calendar"] [aria-selected="true"],
 [data-baseweb="calendar"] [aria-selected="true"] * {
     background: var(--accent) !important;
     color: #0d0f14 !important;
     border-radius: 6px !important;
 }
-/* Hover */
 [data-baseweb="calendar"] button:hover,
 [data-baseweb="calendar"] button:hover * {
-    background: rgba(232,255,60,0.15) !important;
+    background: rgba(105, 255, 60, 0.15) !important;
     color: var(--text) !important;
     border-radius: 6px !important;
 }
-/* Flèches navigation */
 [data-baseweb="calendar"] [aria-label="previous month"],
 [data-baseweb="calendar"] [aria-label="next month"] {
     color: var(--accent) !important;
@@ -258,11 +238,10 @@ h1, h2, h3, h4 { font-family: 'Space Mono', monospace; }
     border-radius: 6px !important;
 }
 [data-baseweb="calendar"] button:hover {
-    background: rgba(232,255,60,0.15) !important;
+    background: rgba(105, 255, 60, 0.15) !important;
     border-radius: 6px !important;
 }
 
-/* ── Text input / Password ──────────────────────────────── */
 [data-testid="stTextInput"] input {
     background: var(--surface) !important;
     border-color: var(--border) !important;

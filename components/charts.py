@@ -1,13 +1,9 @@
-"""
-components/charts.py — Helpers Plotly réutilisables
-"""
 import plotly.express as px
 import plotly.graph_objects as go
 from utils.style import PLOTLY_THEME, CALC_COLORS, TYPE_COLORS, hex_to_rgba
 
 
 def apply_theme(fig):
-    """Applique le thème sombre partagé à n'importe quelle figure Plotly."""
     fig.update_layout(**PLOTLY_THEME)
     return fig
 
@@ -29,7 +25,7 @@ def bar_top_dtc(df, n: int = 15):
     fig = px.bar(
         top, x="Occurrences", y="DTC", orientation="h",
         color="Occurrences",
-        color_continuous_scale=["#252830", "#e8ff3c"],
+        color_continuous_scale=["#252830", "#3cff56"],
     )
     fig.update_layout(yaxis=dict(autorange="reversed"), coloraxis_showscale=False)
     return apply_theme(fig)

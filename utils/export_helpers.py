@@ -1,12 +1,9 @@
-"""
-utils/export_helpers.py — Fonctions d'export Excel et PDF
-"""
+
 import io
 import pandas as pd
 
 
 def to_excel_bytes(df: pd.DataFrame) -> bytes:
-    """Sérialise un DataFrame en bytes XLSX."""
     buf = io.BytesIO()
     with pd.ExcelWriter(buf, engine="openpyxl") as writer:
         df.to_excel(writer, index=False, sheet_name="DTC_Export")
@@ -17,7 +14,6 @@ def to_pdf_bytes(df: pd.DataFrame, title: str = "Export DTC") -> bytes:
     try:
         from fpdf import FPDF
 
-        # Nettoyage des caractères non supportés par Helvetica
         def sanitize(text: str) -> str:
             return (
                 str(text)
