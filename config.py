@@ -46,12 +46,14 @@ CONTROL_PASSWORD = os.getenv("CONTROL_PASSWORD", "admin123")
 import tomllib
 from pathlib import Path
 
-CONFIG_FILE = next(Path(__file__).parent.glob("*.toml"))
-with CONFIG_FILE.open("rb") as file:
-    config = tomllib.load(file)
-if not CONFIG_FILE.exists():
-    import streamlit as st
-    config = st.secrets
+import streamlit as st
+config = st.secrets
+if not config:
+
+    CONFIG_FILE = next(Path(__file__).parent.glob("*.toml"))
+    with CONFIG_FILE.open("rb") as file:
+        config = tomllib.load(file)
+
 
 
 DB_HOST = config["database"].get("host", "localhost")
