@@ -9,13 +9,11 @@ import sys
 
 import config
 
-# ── Logging ───────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s [%(levelname)s] %(message)s'
 )
 
-# ── État global ───────────────────────────────────────────────
 existing_files       = set()
 username             = getpass.getuser()
 inserted_file_count  = 0
@@ -24,7 +22,7 @@ debut_traitement     = None
 db_connection_global = None
 STOP_CAUSE           = "completed"
 
-# ── t_traitement ──────────────────────────────────────────────
+
 def insert_t_traitement(connection, cursor, debut, fin, cause):
     try:
         cursor.execute(
@@ -38,7 +36,6 @@ def insert_t_traitement(connection, cursor, debut, fin, cause):
     except Exception as e:
         logging.error("Erreur inattendue t_traitement : %s", e)
 
-# ── Signal handler ────────────────────────────────────────────
 def signal_handler(sig, frame):
     global STOP_CAUSE#, debut_traitement, db_connection_global
     STOP_CAUSE = "keyboard interrupted"
@@ -64,7 +61,6 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT,  signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
 
-# ── Helpers log ───────────────────────────────────────────────
 def _write_log(entry: str):
     try:
         with open(config.SCAN_LOG_FILE, "a", encoding="utf-8") as f:
@@ -79,7 +75,6 @@ def log_directory_scan(directory):
 def log_file_insertion(entity, insertion_date):
     _write_log(f"{insertion_date} - Fichier inséré : {entity.file_path}\n")
 
-# ── Checkpoint ────────────────────────────────────────────────
 def update_checkpoint(entity):
     try:
         with open(config.CHECKPOINT_FILE, "w", encoding="utf-8") as f:
@@ -88,7 +83,6 @@ def update_checkpoint(entity):
     except Exception as e:
         logging.error("Erreur checkpoint : %s", e)
 
-# ── Entité MDF ────────────────────────────────────────────────
 class MdfEntity:
     def __init__(self, file_path, moyen, creation_date, nbdefaut=0):
         self.file_path     = file_path
@@ -111,7 +105,6 @@ def extract_moyen(file_path):
             return parts[2]
     return None
 
-# ── Insertion DB ──────────────────────────────────────────────
 def insert_file_into_db(entity, db_connection):
     global inserted_file_count
     cursor = db_connection.cursor()
@@ -130,7 +123,6 @@ def insert_file_into_db(entity, db_connection):
     finally:
         cursor.close()
 
-# ── Scan répertoire ───────────────────────────────────────────
 def process_directory(root_dir, db_connection):
     global STOP_CAUSE
     dir_queue = [root_dir]
@@ -172,7 +164,6 @@ def process_directory(root_dir, db_connection):
             logging.error("Erreur scan %s : %s", current_dir, e)
             STOP_CAUSE = "scan error"
 
-# ── Main ──────────────────────────────────────────────────────
 def main():
     global start_time, debut_traitement, db_connection_global, STOP_CAUSE
 
