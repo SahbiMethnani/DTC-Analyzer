@@ -1,41 +1,47 @@
-
 import streamlit as st
 
+
 COLORS = {
-    "bg":       "#9E8C3A",
-    "surface":  "#161920",
-    "border":   "#252830",
-    "accent":   "#69ff3c",
-    "accent2":  "#3ce8ff",
-    "accent3":  "#ff3c6e",
-    "text":     "#e2e5ee",
-    "muted":    "#6b7080",
+    "bg":       "#12151a",
+    "surface":  "#1a1e25",
+    "surface2": "#222730",
+    "border":   "#2c323d",
+    "accent":   "#ffb224",
+    "accent2":  "#4fd1c5",
+    "accent3":  "#ff5d5d",
+    "success":  "#4ade80",
+    "text":     "#e8eaee",
+    "muted":    "#8a93a3",
 }
 
 CALC_COLORS = {
-    "ECU": "#69ff3c",
-    "TCU": "#3ce8ff",
+    "ECU": "#ffb224",
+    "TCU": "#4fd1c5",
     "BCM": "#60a5fa",
     "CCM": "#f87171",
-    "CGW": "#fbbf24",
-    "VCU": "#a78bfa",
+    "CGW": "#a3e635",
+    "VCU": "#c084fc",
 }
 
 TYPE_COLORS = {
     "P": "#4ade80",
     "C": "#f87171",
     "B": "#60a5fa",
-    "U": "#fbbf24",
+    "U": "#c084fc",
 }
 
-# ── Thème Plotly partagé ──────────────────────────────────────
 PLOTLY_THEME = dict(
     paper_bgcolor="rgba(0,0,0,0)",
-    plot_bgcolor="rgba(22,25,32,0.6)",
-    font=dict(family="DM Sans", color="#e2e5ee"),
-    xaxis=dict(gridcolor="#252830", linecolor="#252830"),
-    yaxis=dict(gridcolor="#252830", linecolor="#252830"),
-    colorway=["#69ff3c", "#3ce8ff", "#ff3c6e", "#a78bfa", "#fb923c", "#34d399"],
+    plot_bgcolor="rgba(26,30,37,0.6)",
+    font=dict(family="Barlow, sans-serif", color=COLORS["text"], size=13),
+    xaxis=dict(gridcolor=COLORS["border"], linecolor=COLORS["border"],
+               zerolinecolor=COLORS["border"]),
+    yaxis=dict(gridcolor=COLORS["border"], linecolor=COLORS["border"],
+               zerolinecolor=COLORS["border"]),
+    colorway=["#ffb224", "#4fd1c5", "#60a5fa", "#c084fc", "#a3e635", "#f87171"],
+    legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(color=COLORS["muted"])),
+    hoverlabel=dict(bgcolor=COLORS["surface2"], bordercolor=COLORS["border"],
+                    font=dict(family="Barlow, sans-serif", color=COLORS["text"])),
     margin=dict(l=20, r=20, t=40, b=20),
 )
 
@@ -50,96 +56,163 @@ def apply_page_config():
     )
 
 
-def inject_css():
-    st.markdown("""
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+def hex_to_rgba(hex_color: str, alpha: float = 0.09) -> str:
+    h = hex_color.lstrip("#")
+    r, g, b = int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
+    return f"rgba({r},{g},{b},{alpha})"
 
-:root {
-    --bg:      #3D3C85;
-    --surface: #161920;
-    --border:  #252830;
-    --accent:  #69ff3c;
-    --accent2: #3ce8ff;
-    --accent3: #ff3c6e;
-    --text:    #e2e5ee;
-    --muted:   #6b7080;
-}
 
-[data-testid="stSidebar"] * { color: #ffffff !important; }
+def _root_css() -> str:
+    c = COLORS
+    return f"""
+:root {{
+    --bg: {c['bg']};
+    --surface: {c['surface']};
+    --surface-2: {c['surface2']};
+    --border: {c['border']};
+    --accent: {c['accent']};
+    --accent-soft: {hex_to_rgba(c['accent'], 0.14)};
+    --accent2: {c['accent2']};
+    --accent3: {c['accent3']};
+    --success: {c['success']};
+    --text: {c['text']};
+    --muted: {c['muted']};
+}}
+"""
+
+
+def _badge_css() -> str:
+    return "\n".join(
+        f".badge-{k.lower()} {{ background:{hex_to_rgba(col, 0.12)}; "
+        f"color:{col}; border:1px solid {hex_to_rgba(col, 0.38)}; }}"
+        for k, col in TYPE_COLORS.items()
+    )
+
+
+_STATIC_CSS = """
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap');
 
 html, body, [data-testid="stAppViewContainer"] {
     background: var(--bg) !important;
     color: var(--text) !important;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Barlow', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
 }
+[data-testid="stHeader"] { background: transparent !important; }
+.block-container { padding-top: 2.2rem; max-width: 1400px; }
+
+h1, h2, h3, h4 {
+    font-family: 'Barlow Condensed', sans-serif !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.01em;
+    color: var(--text) !important;
+}
+h1 { font-size: 2.4rem !important; }
+h2 { font-size: 1.8rem !important; }
+h3 { font-size: 1.4rem !important; }
+
+a { color: var(--accent2) !important; }
+
+:is(button, a, input, textarea, [role="tab"], [role="option"]):focus-visible {
+    outline: 2px solid var(--accent) !important;
+    outline-offset: 2px;
+}
+
 [data-testid="stSidebar"] {
     background: var(--surface) !important;
     border-right: 1px solid var(--border);
 }
-h1, h2, h3, h4 { font-family: 'Space Mono', monospace; }
+[data-testid="stSidebar"] :is(p, span, label, li, h1, h2, h3, h4) {
+    color: var(--text) !important;
+}
+[data-testid="stSidebar"] [data-testid="stCaptionContainer"] * {
+    color: var(--muted) !important;
+}
 
 .metric-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 24px;
-    position: relative;
-    overflow: hidden;
-}
-.metric-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    padding: 18px 22px;
 }
 .metric-val {
-    font-family: 'Space Mono', monospace;
-    font-size: 2.2rem;
-    font-weight: 700;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 600;
     color: var(--accent);
     line-height: 1;
+    font-variant-numeric: tabular-nums;
 }
 .metric-label {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    margin-top: 6px;
+    margin-top: 8px;
 }
+.metric-card.ok  .metric-val { color: var(--success); }
+.metric-card.bad .metric-val { color: var(--accent3); }
+
+[data-testid="stMetric"] {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+}
+[data-testid="stMetricValue"] {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-variant-numeric: tabular-nums;
+}
+[data-testid="stMetricLabel"] * { color: var(--muted) !important; }
 
 .section-title {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    border-left: 3px solid var(--accent);
-    padding-left: 10px;
-    margin-bottom: 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+    padding-bottom: 8px;
+    margin: 8px 0 18px;
+    border-bottom: 1px solid var(--border);
 }
 
-.badge { display:inline-block; padding:2px 10px; border-radius:20px; font-size:0.72rem; font-family:'Space Mono',monospace; }
-.badge-p { background:#1a2e1a; color:#4ade80; border:1px solid #4ade8055; }
-.badge-c { background:#2e1a1a; color:#f87171; border:1px solid #f8717155; }
-.badge-b { background:#1a1f2e; color:#60a5fa; border:1px solid #60a5fa55; }
-.badge-u { background:#2e261a; color:#fbbf24; border:1px solid #fbbf2455; }
+.badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
 
-.stButton > button {
+.stButton > button,
+[data-testid="stDownloadButton"] > button {
     background: var(--accent) !important;
-    color: #0d0f14 !important;
+    color: #1a1204 !important;
     border: none !important;
-    font-family: 'Space Mono', monospace !important;
-    font-size: 0.78rem !important;
-    font-weight: 700 !important;
-    border-radius: 8px !important;
-    padding: 10px 20px !important;
-    transition: opacity .2s;
+    font-family: 'Barlow', sans-serif !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+    padding: 9px 20px !important;
+    transition: background .15s, transform .15s;
 }
-.stButton > button:hover { opacity: 0.85; }
+.stButton > button:hover,
+[data-testid="stDownloadButton"] > button:hover {
+    background: #ffc247 !important;
+}
+.stButton > button:active { transform: translateY(1px); }
+.stButton > button:disabled {
+    background: var(--surface-2) !important;
+    color: var(--muted) !important;
+}
 
-.btn-danger > button {
+.btn-secondary > div > button,
+.btn-secondary button {
+    background: transparent !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+}
+.btn-secondary button:hover { background: var(--surface-2) !important; }
+.btn-danger button {
     background: var(--accent3) !important;
     color: #fff !important;
 }
@@ -147,19 +220,60 @@ h1, h2, h3, h4 { font-family: 'Space Mono', monospace; }
 .job-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 24px;
-    margin-bottom: 16px;
+    border-left: 4px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 14px;
 }
-.job-card-running { border-color: var(--accent2); }
-.job-card-success { border-color: #4ade80; }
-.job-card-error   { border-color: var(--accent3); }
+.job-card-running { border-left-color: var(--accent2); }
+.job-card-success { border-left-color: var(--success); }
+.job-card-error   { border-left-color: var(--accent3); }
 
 .stSelectbox > div > div,
-.stMultiSelect > div > div {
+.stMultiSelect > div > div,
+[data-baseweb="select"] > div {
     background: var(--surface) !important;
     border-color: var(--border) !important;
     color: var(--text) !important;
+}
+[data-baseweb="tag"] {
+    background: var(--accent-soft) !important;
+    color: var(--accent) !important;
+}
+[data-baseweb="tag"] * { color: var(--accent) !important; }
+
+[data-baseweb="popover"] > div,
+[data-baseweb="menu"] {
+    background: var(--surface-2) !important;
+    border: 1px solid var(--border);
+    border-radius: 8px !important;
+}
+[data-baseweb="menu"] li,
+[role="option"] { color: var(--text) !important; }
+[data-baseweb="menu"] li:hover,
+[role="option"]:hover,
+[role="option"][aria-selected="true"] {
+    background: var(--accent-soft) !important;
+}
+
+[data-testid="stTextInput"] input,
+[data-testid="stNumberInput"] input,
+textarea {
+    background: var(--surface) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+    caret-color: var(--accent) !important;
+}
+[data-testid="stTextInput"] input::placeholder,
+textarea::placeholder {
+    color: var(--muted) !important;
+    opacity: 1 !important;
+}
+[data-testid="stTextInput"] input:focus,
+[data-testid="stNumberInput"] input:focus,
+textarea:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 1px var(--accent) !important;
 }
 
 [data-testid="stDateInput"] > div,
@@ -179,110 +293,115 @@ h1, h2, h3, h4 { font-family: 'Space Mono', monospace; }
     color: var(--muted) !important;
     opacity: 1 !important;
 }
-[data-testid="stDateInput"] span,
-[data-testid="stDateInputField"] span {
-    color: var(--muted) !important;
-}
 [data-testid="stDateInput"] svg,
 [data-testid="stDateInputField"] svg {
     fill: var(--muted) !important;
-    stroke: var(--muted) !important;
 }
+
 [data-baseweb="calendar"],
 [data-baseweb="calendar"] > div,
 [data-baseweb="calendarHeader"],
 [data-baseweb="monthHeader"],
 [data-baseweb="weekdayHeader"] {
-    background: var(--surface) !important;
-    border: 1px solid var(--border) !important;
-    border-radius: 12px !important;
+    background: var(--surface-2) !important;
+    border-radius: 10px !important;
 }
-[data-baseweb="calendar"] *,
-[data-baseweb="calendar"] div,
-[data-baseweb="calendar"] span,
-[data-baseweb="calendar"] button {
+[data-baseweb="calendar"] { border: 1px solid var(--border) !important; }
+[data-baseweb="calendar"] :is(div, span, button) {
     color: var(--text) !important;
-    background-color: var(--surface) !important;
+    background-color: transparent !important;
 }
-[data-baseweb="calendar"] [data-baseweb="select"] *,
-[data-baseweb="calendar"] h4,
-[data-baseweb="calendar"] h5 {
+[data-baseweb="calendar"] :is(h4, h5),
+[data-baseweb="calendar"] [data-baseweb="select"] * {
     color: var(--accent) !important;
-    background: var(--surface) !important;
 }
-[data-baseweb="calendar"] [aria-label],
-[data-baseweb="weekday"] {
-    color: var(--muted) !important;
-    background: var(--surface) !important;
+[data-baseweb="weekday"],
+[data-baseweb="calendar"] [aria-label] { color: var(--muted) !important; }
+[data-baseweb="calendar"] button:hover {
+    background-color: var(--accent-soft) !important;
+    border-radius: 6px !important;
 }
 [data-baseweb="calendar"] [aria-selected="true"],
 [data-baseweb="calendar"] [aria-selected="true"] * {
-    background: var(--accent) !important;
-    color: #0d0f14 !important;
+    background-color: var(--accent) !important;
+    color: #1a1204 !important;
     border-radius: 6px !important;
 }
-[data-baseweb="calendar"] button:hover,
-[data-baseweb="calendar"] button:hover * {
-    background: rgba(105, 255, 60, 0.15) !important;
-    color: var(--text) !important;
-    border-radius: 6px !important;
-}
-[data-baseweb="calendar"] [aria-label="previous month"],
-[data-baseweb="calendar"] [aria-label="next month"] {
-    color: var(--accent) !important;
+
+[data-baseweb="tab-list"] { border-bottom: 1px solid var(--border); gap: 4px; }
+[data-baseweb="tab"] {
+    font-family: 'Barlow', sans-serif !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    color: var(--muted) !important;
     background: transparent !important;
 }
-[data-baseweb="calendar"] [aria-selected="true"] {
-    background: var(--accent) !important;
-    color: #0d0f14 !important;
-    border-radius: 6px !important;
-}
-[data-baseweb="calendar"] button:hover {
-    background: rgba(105, 255, 60, 0.15) !important;
-    border-radius: 6px !important;
-}
+[data-baseweb="tab"][aria-selected="true"] { color: var(--text) !important; }
+[data-baseweb="tab-highlight"] { background-color: var(--accent) !important; height: 3px !important; }
+[data-baseweb="tab-border"] { background-color: transparent !important; }
 
-[data-testid="stTextInput"] input {
-    background: var(--surface) !important;
-    border-color: var(--border) !important;
-    color: var(--text) !important;
+[data-testid="stDataFrame"] {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
 }
-[data-testid="stTextInput"] input::placeholder {
-    color: var(--muted) !important;
-    opacity: 1 !important;
+[data-testid="stExpander"] {
+    background: var(--surface);
+    border: 1px solid var(--border) !important;
+    border-radius: 10px;
 }
-[data-testid="stTabs"] button {
-    font-family: 'Space Mono', monospace !important;
-    font-size: 0.75rem !important;
-}
-[data-testid="stDataFrame"] { border-radius: 10px; overflow: hidden; }
 .stAlert { border-radius: 10px; }
 div[data-testid="stHorizontalBlock"] { gap: 16px; }
+hr { border-color: var(--border) !important; }
 
-/* ── Terminal output ──────────────────────────────────────── */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
 .terminal-box {
-    background: #050608;
+    background: #0b0d10;
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 14px 16px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.75rem;
-    color: #4ade80;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.55;
+    color: var(--success);
     max-height: 280px;
     overflow-y: auto;
     white-space: pre-wrap;
     word-break: break-all;
 }
-.terminal-box.err { color: #f87171; }
-</style>
-""", unsafe_allow_html=True)
+.terminal-box.err { color: var(--accent3); }
+
+@media (max-width: 640px) {
+    .block-container { padding-left: 1rem; padding-right: 1rem; }
+    .metric-val { font-size: 2.2rem; }
+    h1 { font-size: 1.9rem !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+}
+"""
+
+
+def inject_css():
+    st.markdown(
+        f"<style>{_root_css()}\n{_badge_css()}\n{_STATIC_CSS}</style>",
+        unsafe_allow_html=True,
+    )
 
 
 def section_title(text: str):
     st.markdown(f'<div class="section-title">{text}</div>', unsafe_allow_html=True)
 
 
-def hex_to_rgba(hex_color: str, alpha: float = 0.09) -> str:
-    h = hex_color.lstrip("#")
-    r, g, b = int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
-    return f"rgba({r},{g},{b},{alpha})"
+def metric_card(label: str, value, state: str = ""):
+    st.markdown(
+        f'<div class="metric-card {state}">'
+        f'<div class="metric-val">{value}</div>'
+        f'<div class="metric-label">{label}</div></div>',
+        unsafe_allow_html=True,
+    )

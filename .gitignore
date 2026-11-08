@@ -14,7 +14,6 @@ env/
 ENV/
 .Python
 
-# ── Cache Python ──────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *.pyo
@@ -22,54 +21,42 @@ __pycache__/
 *.pyc
 .Python
 
-# ── Streamlit ─────────────────────────────────────────────────
 .streamlit/secrets.toml
 
-# ── Jobs & exécutables ────────────────────────────────────────
 jobs/*.exe
 jobs/*.bat
 jobs/*.dll
 jobs/*.log
 
-# ── Exports générés ───────────────────────────────────────────
 *.xlsx
 *.pdf
 !template_dtc.xlsx
 
-# ── Logs ──────────────────────────────────────────────────────
 *.log
 logs/
 
-# ── OS ────────────────────────────────────────────────────────
-# Windows
 Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 
-# Mac
 .DS_Store
 .AppleDouble
 .LSOverride
 ._*
 
-# Linux
 *~
 
-# ── IDE ───────────────────────────────────────────────────────
-# VS Code
+
 .vscode/
 *.code-workspace
 
-# PyCharm
 .idea/
 *.iml
 
-# Jupyter
 .ipynb_checkpoints/
 *.ipynb
 
-# ── Distribution / Build ──────────────────────────────────────
 dist/
 build/
 *.egg-info/
@@ -79,13 +66,11 @@ wheels/
 pip-wheel-metadata/
 MANIFEST
 
-# ── Tests ─────────────────────────────────────────────────────
 .pytest_cache/
 .coverage
 htmlcov/
 .tox/
 
-# ── Données sensibles ─────────────────────────────────────────
 *.csv
 *.sql
 *.db
