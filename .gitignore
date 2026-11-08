@@ -22,6 +22,7 @@ __pycache__/
 .Python
 
 .streamlit/secrets.toml
+config.toml
 
 jobs/*.exe
 jobs/*.bat
