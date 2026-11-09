@@ -405,8 +405,6 @@ def metric_card(label: str, value, state: str = ""):
         f'<div class="metric-label">{label}</div></div>',
         unsafe_allow_html=True,
     )
-import streamlit as st
-
 def apply_selectbox_style():
     st.markdown("""
     <style>
