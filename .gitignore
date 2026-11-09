@@ -1,13 +1,8 @@
-# ─────────────────────────────────────────────────────────────
-# .gitignore — DTC Dashboard WPM XCT
-# ─────────────────────────────────────────────────────────────
 
-# ── Environnement & secrets ───────────────────────────────────
 .env
 *.env
 !.env.example
 
-# ── Environnements virtuels Python ───────────────────────────
 venv/
 .venv/
 env/
@@ -47,6 +42,7 @@ $RECYCLE.BIN/
 ._*
 
 *~
+config.py
 
 
 .vscode/
