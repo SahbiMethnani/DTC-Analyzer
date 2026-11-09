@@ -19,7 +19,7 @@ PAGES = [
 def render_sidebar(files_df: pd.DataFrame, dtc_df: pd.DataFrame) -> tuple[str, dict]:
     
     with st.sidebar:
-        st.markdown("#  DTC<br>Dashboard", unsafe_allow_html=True)
+        st.markdown("# DTC<br>Dashboard", unsafe_allow_html=True)
         st.markdown("---")
 
         section_title("Navigation")
@@ -33,6 +33,7 @@ def render_sidebar(files_df: pd.DataFrame, dtc_df: pd.DataFrame) -> tuple[str, d
             if not files_df.empty
             else ["Tous"]
         )
+        #sel_moyen = st.selectbox("Moyen", moyens)
         sel_moyen = st.selectbox("Moyen", moyens)
 
         calcs = (

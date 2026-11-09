@@ -37,13 +37,25 @@ def _row_params(row):
 def render():
     st.markdown("## Import DTC depuis Excel")
 
+  #  st.markdown(f"""
+   # <div class="metric-card">
+    #    <div class="metric-label">Colonnes attendues dans le fichier Excel</div><br>
+     #   <code style="color:#000000">{" | ".join(REQUIRED_COLS)}</code>
+    #</div>""", unsafe_allow_html=True)
+    #st.markdown("<br>", unsafe_allow_html=True)
     st.markdown(f"""
     <div class="metric-card">
-        <div class="metric-label">Colonnes attendues dans le fichier Excel</div><br>
-        <code style="color:#e8ff3c">{" | ".join(REQUIRED_COLS)}</code>
-    </div>""", unsafe_allow_html=True)
+        <div class="metric-label" style="font-size:18px; font-weight:600;">
+            Colonnes attendues dans le fichier Excel
+        </div>
+        <div style="margin-top:10px; line-height:1.8;">
+            <code style="color:#000000; font-size:17px; padding:6px 10px;
+                         background:#f1f3f5; border-radius:6px; display:inline-block;">
+                {" | ".join(REQUIRED_COLS)}
+            </code>
+            </div>
+                 </div>""", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
-
     uploaded = st.file_uploader("Déposer le fichier Excel", type=["xlsx", "xls"])
 
     if uploaded:

@@ -1,11 +1,12 @@
 import streamlit as st
-from utils.style import apply_page_config, inject_css
+from utils.style import apply_page_config, apply_selectbox_style, inject_css
 from components.sidebar import render_sidebar
 from database.loaders import load_files, load_dtc_all
 from utils.filters import apply_filters
 
 apply_page_config()
 inject_css()
+apply_selectbox_style()
 
 files_df  = load_files()
 dtc_df    = load_dtc_all()

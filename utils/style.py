@@ -405,3 +405,44 @@ def metric_card(label: str, value, state: str = ""):
         f'<div class="metric-label">{label}</div></div>',
         unsafe_allow_html=True,
     )
+import streamlit as st
+
+def apply_selectbox_style():
+    st.markdown("""
+    <style>
+    /* Champ Selectbox */
+    div[data-baseweb="select"] > div {
+        background-color: #2563eb !important;
+        color: white !important;
+        border-color: #2563eb !important;
+    }
+
+    /* Texte du champ */
+    div[data-baseweb="select"] span {
+        color: white !important;
+    }
+
+    /* Menu déroulant */
+    div[data-baseweb="popover"] ul {
+        background-color: #2563eb !important;
+    }
+
+    /* Options */
+    div[data-baseweb="popover"] li {
+        background-color: #2563eb !important;
+        color: white !important;
+    }
+
+    /* Option survolée */
+    div[data-baseweb="popover"] li:hover {
+        background-color: #1d4ed8 !important;
+        color: white !important;
+    }
+
+    /* Option sélectionnée */
+    div[data-baseweb="popover"] li[aria-selected="true"] {
+        background-color: #1e40af !important;
+        color: white !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
