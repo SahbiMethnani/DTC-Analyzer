@@ -1,4 +1,4 @@
-from dotenv import load_dotenv
+"""from dotenv import load_dotenv
 import os
 
 load_dotenv()   
@@ -41,8 +41,8 @@ JOB2_PATH    = os.getenv("JOB2_PATH", "jobs/job2.exe")
 JOB2_LABEL   = os.getenv("JOB2_LABEL", "Job 2 — Traitement")
 
 CONTROL_PASSWORD = os.getenv("CONTROL_PASSWORD", "admin123")
-
 """
+
 import tomllib
 from pathlib import Path
 
@@ -101,4 +101,3 @@ JOB2_LABEL = config["jobs"]["job2"].get("label", "Job 2 - Traitement")
 
 
 CONTROL_PASSWORD = config["security"].get("control_password", "admin123")
-"""
