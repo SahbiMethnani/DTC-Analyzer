@@ -12,7 +12,7 @@ REQUIRED_COLS = [
 ]
 
 INSERT_SQL = """
-    INSERT INTO t_dtc
+    INSERT IGNORE INTO t_dtc
     (date, calculateur, Kilometrage, délai_apparition, groupe_apparition,
      status_suivi, commentaire, id_t_acq_files, Channel, DTC)
     VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
