@@ -22,6 +22,7 @@ def get_pool():
         return None
 
 
+
 def query(sql: str, params=None) -> pd.DataFrame:
     
     pool = get_pool()
